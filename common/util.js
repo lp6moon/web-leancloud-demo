@@ -1,9 +1,18 @@
 var _=require('underscore');
 var Promise=require('leanengine').Promise;
 var fs=require('fs');
+var path=require('path');
 
 
 var s=module.exports={};
+
+s.Pattern={
+    Email: RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/),
+    Mobile: RegExp(/^1[3,4,5,7,8]{1}[0-9]{1}[0-9]{8}$/),
+    Phone: RegExp(/^((0\d{2,3})-?)?(\d{7,8})(-(\d{3,}))?$/),
+    QQ: RegExp(/^[1-9][0-9]{4,9}$/),
+    ZH: RegExp(/[\u4e00-\u9fa5]+/)
+};
 
 /**将数字number保留precision位小数
  * number：需要转换的数字，Number类型
@@ -131,5 +140,34 @@ s.File={
                 });
             });
         });
+    },
+    /*递归查找此目录下所有符合条件的文件/文件夹，返回结果包含完整的文件路径的数组。
+     * 回调函数filter(dir,fileName)返回true（或者返回promise解析为true），则把对应的
+     * 完整文件路径添加到返回结果里*/
+    find:function(dir,filter){
+        var allFiles=[];
+        filter=filter?filter:function(){return Promise.as(true);};
+
+        var find=function(dir,files){
+            return new Promise(function(resolve){
+                fs.readdir(dir,function(err,nameList){
+                    if(err) return reject(err);
+
+                    Promise.all(_.map(nameList,function(fileName){
+                        var fullPath=path.join(dir,fileName);
+                        var filterFile=filter(dir,fileName).then(function(isOK){
+                            if(isOK)files.push(fullPath);
+                        });
+                        var findInSub= s.File.isDir(fullPath).then(function(isDir){
+                            if(isDir)return find(fullPath,files);
+                        });
+                        return Promise.all([filterFile,findInSub]);
+                    })).then(function(){resolve(files)})
+
+                });
+            });
+        };
+
+        return find(dir,allFiles);
     }
 }
