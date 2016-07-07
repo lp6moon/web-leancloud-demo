@@ -32,6 +32,13 @@ module.exports={
             dir:path.join(APP_ROOT_DIR,'router')
         },
 
+        /*AVd的cookie_session中间件*/
+        COOKIE_SESSION:{
+            secret: 'my secret',
+            maxAge: 24*60*60*1000,
+            fetchUser: true
+        },
+
         //serve-static中间件，配置公共资源访问目录。maxAge：公共资源在浏览器端的缓存毫秒数，超时后会重新向服务器请求获取新资源
         STATIC:{
             url:'/static',//访问静态资源的URL路径前缀

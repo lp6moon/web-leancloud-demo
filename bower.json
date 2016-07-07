@@ -1,0 +1,9 @@
+{
+  "name": "web-leancloud-demo",
+  "version": "1.0.0",
+  "dependencies": {
+    "jQuery": "~3.0.0",
+    "leancloud-storage": "~1.2.1",
+    "underscore": "~1.8.3"
+  }
+}

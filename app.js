@@ -58,13 +58,16 @@ var initMiddleware=function*(){
         });
     };
 
+    //app.use(AV.Cloud.HttpsRedirect());    //强制使用https访问
+
     app.use(require('connect-timeout')(CFG.CONNECT_TIMEOUT));
     app.use(require('serve-favicon')(CFG.FAVICON));
     app.use(AV.express());
 
-    //todo：加载session和cookie中间件
-    //app.use(AV.Cloud.CookieSession({ secret: 'my secret', maxAge: 3600000, fetchUser: true }));
-    //https://github.com/expressjs/cookie-session
+    app.use(AV.Cloud.CookieSession(CFG.COOKIE_SESSION));
+
+    //自定义session 与AV兼容 详情见https://github.com/expressjs/cookie-session
+    //app.use(require('cookie-session')({secret:'my secret'}));
 
 
     app.use(CFG.STATIC.url,express.static(CFG.STATIC.dir,CFG.STATIC.options));
@@ -99,7 +102,7 @@ var initAVCloud=function(){
             return Promise.as(path.extname(name)=='.js');
         }).then(function(fileList){
             _.each(fileList,function(file){
-                logger.info('加载云函数文件：'+file);
+                logger.debug('加载云函数文件：'+file);
                 require(file);
             })
         })
