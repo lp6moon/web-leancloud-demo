@@ -1,4 +1,4 @@
-var _=require('underscore');
+var _=require('lodash');
 var Promise=require('leanengine').Promise;
 var fs=require('fs');
 var path=require('path');
@@ -13,68 +13,6 @@ s.Pattern={
     QQ: RegExp(/^[1-9][0-9]{4,9}$/),
     ZH: RegExp(/[\u4e00-\u9fa5]+/)
 };
-
-/**将数字number保留precision位小数
- * number：需要转换的数字，Number类型
- * precision：小数精度，非负整数，默认为2
- * toNumber：是否返回number类型结果，默认为false。注意：如果以Number类型返回，末尾0将不保留*/
-s.toFixedDecimal=function(number,precision,toNumber){
-    if(!_.isNumber(number)) return number;
-
-    var scale= _.isNumber(precision)&&precision>=0?parseInt(precision):2;
-    var rs=Math.round(number*Math.pow(10,scale))/Math.pow(10,scale);
-    return toNumber?rs:rs.toFixed(scale);
-};
-
-/*转换属性链为数组*/
-var props=function(prop){
-    var props=[];
-    if(!prop||!_.isString(prop))return props;
-
-    _.each(prop.split('.'),function(v){
-        if(!v)return;
-        _.each(v.split('['),function(p){
-            if(!p)return;
-            var i= p.indexOf(']');
-            p=i==-1?p: p.substring(0,i);
-            props.push(p);
-        });
-    });
-
-    return props;
-}
-
-/*获取obj的prop属性值，prop支持属性链*/
-s.getProp=function(obj,prop){
-    return _.reduce(props(prop),function(memo,pn){
-        if(!pn||!memo)return memo;
-        return memo[pn];
-    },obj);
-}
-
-/*设置obj的prop属性值，prop支持属性链*/
-s.setProp=function(obj,prop,value){
-    var pps=props(prop);
-    if(_.isEmpty(pps))return;
-    var last=pps.pop();
-    var i=-1;
-
-    var memo=_.reduce(pps,function(memo,pn){
-        i++;
-        if(!pn||!memo)return;
-        if(memo[pn])return memo[pn];
-
-        var next=pps[i+1];
-        if(next&&_.isNumber(parseInt(next))){
-            memo[pn]=[];
-        }else{
-            memo[pn]={};
-        }
-        return memo[pn];
-    },obj);
-
-    if(memo)memo[last]=value;
-}
 
 s.isAbsUrl=function(url){
     url=url||'';

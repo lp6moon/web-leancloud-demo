@@ -1,4 +1,4 @@
-var _=require('underscore');
+var _=require('lodash');
 var AV=require('leanengine');
 var Promise=AV.Promise;
 var Schema=require('./schema.js');

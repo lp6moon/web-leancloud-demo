@@ -2,8 +2,7 @@ require('./app-ctx.js');
 
 var express = require('express');
 var AV = require('leanengine');
-var _=require('underscore');
-_.str=require('underscore.string');
+var _=require('lodash');
 var path=require('path');
 var co=require('co');
 var logger=AppCtx.Logger('app.js');
@@ -81,7 +80,7 @@ var initMiddleware=function*(){
 
     //注册业务服务router
     yield AppCtx.Util.File.find(CFG.SERVICE.dir, function(dir,fileName){
-        return Promise.as(_.str.endsWith(fileName,'.js'));
+        return Promise.as(_.endsWith(fileName,'.js'));
     }).then(function(fileList){
         addServices(fileList);
     });

@@ -1,5 +1,5 @@
 var logger=AppCtx.Logger('error-handler.js');
-var _=require('underscore');
+var _=require('lodash');
 
 var content500={'errorCode':500,'message':'服务器内部错误!',errorStack:''};
 var content404={'errorCode':404,'message':'不能找到请求的URL!',errorStack:''};

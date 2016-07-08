@@ -1,6 +1,6 @@
 var APP_ROOT_DIR=AppCtx.APP_ROOT_DIR;
 var path=require('path')
-var _=require('underscore');
+var _=require('lodash');
 
 
 module.exports={
