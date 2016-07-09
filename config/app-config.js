@@ -1,5 +1,5 @@
 var APP_ROOT_DIR=AppCtx.APP_ROOT_DIR;
-var path=require('path')
+var path=require('path');
 var _=require('lodash');
 
 
@@ -16,9 +16,25 @@ module.exports={
         region:process.env.LEANCLOUD_REGION,  //值为 CN 或 US，分别表示国内节点和美国节点
 
         //云函数文件目录
-        cloudDirs:[
-            path.join(APP_ROOT_DIR,'./cloud')   //云函数目录,层级查找
+        cloudDir:path.join(APP_ROOT_DIR,'./cloud')   //云函数目录,层级查找
+
+    },
+
+    BUSINESS_MODULE:{
+        rootDir:path.join(APP_ROOT_DIR,'busi-module'),  //所有模块的根目录
+        modules:[
+            {
+                name:'m1',          //模块名，是静态资源和动态资源的{module_name}变量
+                dir:'m1',           //模块的目录
+                static:'static',    //模块的静态资源目录  注册后的url：/static/{module_name}/XXX
+                router:'router',    //模块的静态资源目录  注册后的url：/api/{module_name}/XXX
+                cloud:'cloud'       //云函数目录
+            }
         ]
+    },
+
+    DB:{
+        schemaPath:path.join(APP_ROOT_DIR,'common/schema-fields.js')  //所有模块的根目录
     },
 
     SERVER:{
@@ -26,17 +42,18 @@ module.exports={
         STOP_TIMEOUT:5*1000,//在停止服务器开始后等待多少毫秒，强制终止服务器进程
         FAVICON:path.join(APP_ROOT_DIR,'static/assets/favicon.png'),
 
-        SERVICE:{
-            url:'/api',
-            home:'home.js',//注册处理'/'路径的服务，不添加访问路径前缀，注意：此服务类内部不要添加除"/"以为的访问路径
-            dir:path.join(APP_ROOT_DIR,'router')
-        },
-
         /*AVd的cookie_session中间件*/
         COOKIE_SESSION:{
             secret: 'my secret',
             maxAge: 24*60*60*1000,
             fetchUser: true
+        },
+
+        //api接口服务配置
+        SERVICE:{
+            url:'/api',
+            home:'home.js',//注册处理'/'路径的服务，不添加访问路径前缀，注意：此服务类内部不要添加除"/"以为的访问路径
+            dir:path.join(APP_ROOT_DIR,'router')
         },
 
         //serve-static中间件，配置公共资源访问目录。maxAge：公共资源在浏览器端的缓存毫秒数，超时后会重新向服务器请求获取新资源

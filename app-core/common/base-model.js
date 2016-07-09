@@ -1,7 +1,7 @@
 var _=require('lodash');
 var AV=require('leanengine');
 var Promise=AV.Promise;
-var Schema=require('./schema.js');
+var SchemaManage=require('./schema-manage.js');
 
 /*缓存AV.Object*/
 var CACHE={};
@@ -41,11 +41,13 @@ var FN=module.exports=function(name){
      * limit: 最多返回的记录条数，默认为100,  -1表示返回全部查询到的记录
      * offset:从第几条开始返回，默认为0*/
     s.findAll=function(exps,fields,orderBy,limit,offset){
+        if(!FN.isValidExps(exps))
+            return Promise.error(new Error('表达式格式错误：'+JSON.stringify(exps)));
+
         var buildQuery=function(){
             var q=AVQuery();
 
-            var error=FN.appendExps(q,exps);
-            if(error) return Promise.error(error);
+            FN.appendExps(q,exps);
 
             fields=fields||[];
             fields= _.isString(fields)?fields.split(','):fields;
@@ -101,7 +103,7 @@ var FN=module.exports=function(name){
         isFilterFields=_.isUndefined(isFilterFields)?true:isFilterFields;
         var saveArray=_.compact(_.isArray(data)?data:[data]);
         return AV.Object.saveAll(_.map(saveArray,function(item){
-            if(isFilterFields) item=_.pick(item,Schema.fields(name));
+            if(isFilterFields) item=_.pick(item,SchemaManage.fields(name));
             return new AVModel(item);
         })).then(function(result){
             return _.isArray(data)?result:result[0];
@@ -131,7 +133,7 @@ FN.isValidExps=function(exps){
     if(_.isEmpty(exps))return true;
 
     return !_.some(exps,function(exp){
-        return !_.isArray(exp)||!exp[0]||! _.contains(OP,exp[1]);
+        return !_.isArray(exp)||!exp[0]||! _.includes(OP,exp[1]);
     });
 }
 
@@ -147,7 +149,7 @@ FN.appendExps=function(query,exps){
         if(!_.isArray(exp))return;
 
         var f=exp[0],op=exp[1],v=exp[2];
-        op= _.contains(OP,op)?op:'';
+        op= _.includes(OP,op)?op:'';
         if(!f||!op)return;
 
         var m=OPMethod[op]||op;
