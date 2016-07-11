@@ -50,13 +50,13 @@ $(function(){
 
         if(!uName||!uPass) return alert('用户名或密码不能为空')
 
-        $.get('/api/test/lp/login',{username:uName,password:uPass}).done(function(res){
+        $.get('/api/auth/login',{username:uName,password:uPass}).done(function(res){
             $('#show_content').html(res)
         })
     });
 
     $('#logout2').click(function(e){
-        $.get('/api/test/lp/logout').done(function(res){
+        $.get('/api/auth/logout').done(function(res){
             $('#show_content').html(res)
         })
     });

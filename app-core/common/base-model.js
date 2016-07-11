@@ -1,7 +1,6 @@
 var _=require('lodash');
 var AV=require('leanengine');
 var Promise=AV.Promise;
-var SchemaManage=require('./schema-manage.js');
 
 /*缓存AV.Object*/
 var CACHE={};
@@ -22,9 +21,10 @@ var OPMethod={
     'desc':'addDescending'
 };
 
-var FN=module.exports=function(name){
+var FN=module.exports=function(name,logger){
     if(!name) throw new Error('base-model传入参数错误');
 
+    logger=logger||AppCtx.Logger('base-model.js');
     var AVModel=CACHE[name]||AV.Object.extend(name);
     var AVQuery=function(){return new AV.Query(name)};
 
@@ -41,6 +41,7 @@ var FN=module.exports=function(name){
      * limit: 最多返回的记录条数，默认为100,  -1表示返回全部查询到的记录
      * offset:从第几条开始返回，默认为0*/
     s.findAll=function(exps,fields,orderBy,limit,offset){
+        exps=exps||[];
         if(!FN.isValidExps(exps))
             return Promise.error(new Error('表达式格式错误：'+JSON.stringify(exps)));
 
@@ -65,7 +66,8 @@ var FN=module.exports=function(name){
             var q=buildQuery();
             q.limit(parseInt(limit) || 100);
             q.skip(parseInt(offset) || 0);
-            //console.log(q.toJSON())
+
+            logger.debug('findAll查询对象:'+JSON.stringify(q));
             return q.find();
         }
 
@@ -74,7 +76,8 @@ var FN=module.exports=function(name){
         var exec=function(){
             var MAX_LIMIT=1000;
             var q=buildQuery().limit(MAX_LIMIT).skip(_skip);
-            //console.log(q.toJSON());
+
+            logger.debug('findAll查询对象:'+JSON.stringify(q));
             return q.find().then(function(list){
                 list=list||[];
 
@@ -94,6 +97,16 @@ var FN=module.exports=function(name){
         return AVQuery().equalTo('objectId',id).first();
     };
 
+    s.count=function(exps){
+        var q=AVQuery();
+
+        var error=FN.appendExps(q,exps);
+        if(error) return Promise.error(new Error('表达式格式错误：'+JSON.stringify(exps)));
+
+        logger.debug('count查询对象:'+JSON.stringify(q));
+        return q.count();
+    };
+
     /**保存数据，可单个也可批量
      * data：保存数据，可为数组也可为单个数据对象
      * isisFilterFields：是否过滤冗余字段，默认值为true*/
@@ -103,7 +116,7 @@ var FN=module.exports=function(name){
         isFilterFields=_.isUndefined(isFilterFields)?true:isFilterFields;
         var saveArray=_.compact(_.isArray(data)?data:[data]);
         return AV.Object.saveAll(_.map(saveArray,function(item){
-            if(isFilterFields) item=_.pick(item,SchemaManage.fields(name));
+            if(isFilterFields) item=_.pick(item,AppCtx.SchemaManage.fields(name));
             return new AVModel(item);
         })).then(function(result){
             return _.isArray(data)?result:result[0];

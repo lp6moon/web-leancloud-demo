@@ -5,6 +5,7 @@ var AV=require('leanengine');
 var Promise=AV.Promise;
 var co=require('co');
 var request=require('request');
+var _=require('lodash')
 
 
 router.get('/',function(req,res,next){
@@ -14,32 +15,11 @@ router.get('/',function(req,res,next){
 
 router.get('/1',function(req,res,next){
     var model=new AppCtx.BaseModel('TestClass');
-    model.findAll([['name','=','liupeng']]).then(function(data){
+    model.findAll([['createdAt','>',"2016-06-21T07:01:40.773Z"]]).then(function(data){
         res.send(data)
     }).catch(next)
 });
 
-router.get('/login',function(req,res,next){
-    var uName=req.query.username;
-    var uPass=req.query.password;
-
-    AV.User.logIn(uName,uPass).then(function(user) {
-        res.saveCurrentUser(user);
-        res.send('登录成功')
-    },function(error) {
-        console.log(error);
-        res.send('登录失败')
-    });
-});
-
-router.get('/logout',function(req,res,next){
-    if(!req.currentUser) return res.send('登出成功');
-
-    res.clearCurrentUser();
-    AV.User.logOut().then(function(){
-        res.send('登出成功')
-    },function(error) {
-        console.log(error);
-        res.send('登出成功')
-    });
+router.get('/2',function(req,res,next){
+    res.send(AppCtx.SchemaManage.fields('TestClass'))
 });

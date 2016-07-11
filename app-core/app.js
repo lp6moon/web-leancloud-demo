@@ -26,9 +26,10 @@ module.exports=function(options){
         AppCtx.AppConfig=require(options.appConfigPath);
 
         AppCtx.Util=require('./common/util.js');
-        AppCtx.BaseModel=require('./common/base-model.js');
         AppCtx.SchemaManage=require('./common/Schema-manage.js');
+        AppCtx.BaseModel=require('./common/base-model.js');
         AppCtx.BaseRouter=require('./common/base-router.js');
+        AppCtx.BusiError=require('./common/busi-error.js');
 
         AppCtx.app=app;
         AppCtx.server=false;
@@ -49,7 +50,7 @@ module.exports=function(options){
         logger.info('初始化数据存储');
 
         var DBCFG=AppCtx.AppConfig.DB;
-        AppCtx.SchemaManage.setSchemaFields(DBCFG.schemaPath,true);
+        AppCtx.SchemaManage.setSchemaFields(require(DBCFG.schemaPath),true);
     };
 
     var initApp=function(){
@@ -175,6 +176,7 @@ module.exports=function(options){
         /*注册错误处理函数*/
         var errorHandler=require('./filter/error-handler.js');
         app.use(errorHandler.notFoundErrorHandler);
+        app.use(errorHandler.avErrorHandler);   //处理云请求的错误
         app.use(errorHandler.serverErrorHandler);
     };
 
