@@ -26,7 +26,7 @@ module.exports=function(options){
         AppCtx.AppConfig=require(options.appConfigPath);
 
         AppCtx.Util=require('./common/util.js');
-        AppCtx.SchemaManage=require('./common/Schema-manage.js');
+        AppCtx.SchemaManage=require('./common/schema-manage.js');
         AppCtx.BaseModel=require('./common/base-model.js');
         AppCtx.BaseRouter=require('./common/base-router.js');
         AppCtx.BusiError=require('./common/busi-error.js');
@@ -47,7 +47,7 @@ module.exports=function(options){
     };
 
     var initDB=function(){
-        logger.info('初始化数据存储');
+        logger.info('初始化数据模型');
 
         var DBCFG=AppCtx.AppConfig.DB;
         AppCtx.SchemaManage.setSchemaFields(require(DBCFG.schemaPath),true);

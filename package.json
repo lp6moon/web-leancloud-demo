@@ -23,6 +23,7 @@
     "lodash": "^4.13.1",
     "log4js": "^0.6.37",
     "method-override": "^2.3.6",
+    "moment": "^2.14.1",
     "multer": "^1.1.0",
     "qs": "^6.2.0",
     "request": "^2.72.0",
