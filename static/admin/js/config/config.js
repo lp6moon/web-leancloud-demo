@@ -11,8 +11,8 @@ var CONFIG={
             'av':'lib/leancloud-storage/dist/av-min',
             'webix':'lib/webix/codebase/webix',
             'webix.mvc.core':'lib/webix-mvc-core/core',
-            /*'webix.mvc.core.menu':'lib/webix-mvc-core/plugins/menu',
-            'webix.mvc.core.user':'lib/webix-mvc-core/plugins/user',
+            'webix.mvc.core.menu':'lib/webix-mvc-core/plugins/menu',
+            /*'webix.mvc.core.user':'lib/webix-mvc-core/plugins/user',
             'webix.mvc.core.locale':'lib/webix-mvc-core/plugins/locale',*/
 
             /**配置require插件*/
@@ -42,10 +42,10 @@ var CONFIG={
         ],
         MVC:{
             id:			"admin",
-            name:		"admin",
+            name:		"管理系统",
             version:	"1.0.0",
             debug:		true,
-            start:		"/home",
+            start:		"/home/start",
             viewPath:   "admin/views/",
             login:      "/login"
         }

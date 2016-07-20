@@ -15,6 +15,12 @@ require(['app','domReady!'],function(app){
 
     app.status={};
 
+    app.checkLogin=function(){
+        $.get('common/user/token').then(function(res){
+            if(res.data&&!AV.User.current()) AV.User.become(res.data);
+        })
+    };
+
     app.toLoginPage=function(){
         app.status.lastPage="/"+_.map(app.path,'page').join('/');
         app.show(app.config.login);
