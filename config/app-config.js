@@ -16,7 +16,9 @@ module.exports={
         region:process.env.LEANCLOUD_REGION,  //值为 CN 或 US，分别表示国内节点和美国节点
 
         //云函数文件目录
-        cloudDir:path.join(APP_ROOT_DIR,'./cloud')   //云函数目录,层级查找
+        cloudDir:path.join(APP_ROOT_DIR,'./cloud'),   //云函数目录,层级查找
+
+        redisEnvKey:''  //leanCache的redis环境变量KEY值 例如：REDIS_URL_<实例名称>
 
     },
 

@@ -1,6 +1,8 @@
 global.AppCtx={
     Logger:function(tag){
-        return require('log4js').getLogger(tag);
+        var l=require('log4js').getLogger(tag);
+        if(AppCtx.Logger.level) l.setLevel(AppCtx.Logger.level);
+        return l;
     }
 };
 
@@ -9,7 +11,7 @@ var AV = require('leanengine');
 var _=require('lodash');
 var path=require('path');
 var co=require('co');
-var logger=AppCtx.Logger('app.js');
+var logger=false;
 
 var Promise=AV.Promise;
 var app = express();
@@ -20,19 +22,22 @@ var app = express();
  * */
 module.exports=function(options){
     var initCtx=function(){
-        logger.info('初始化App上下文环境');
-
         AppCtx.APP_ROOT_DIR=options.appRootDir;
         AppCtx.AppConfig=require(options.appConfigPath);
+        AppCtx.app=app;
+        AppCtx.server=false;
+        AppCtx.Logger.level=AppCtx.AppConfig.AV.appEnv=='development'?'debug':'error';  //根据环境设置日志显示级别
+
+        logger=AppCtx.Logger('app.js')
+        logger.info('初始化App上下文环境');
 
         AppCtx.Util=require('./common/util.js');
         AppCtx.SchemaManage=require('./common/schema-manage.js');
         AppCtx.BaseModel=require('./common/base-model.js');
         AppCtx.BaseRouter=require('./common/base-router.js');
         AppCtx.BusiError=require('./common/busi-error.js');
+        AppCtx.RedisManage=require('./common/redis-manage.js');
 
-        AppCtx.app=app;
-        AppCtx.server=false;
     };
 
     var initAV=function(){

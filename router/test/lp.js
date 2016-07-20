@@ -23,3 +23,5 @@ router.get('/1',function(req,res,next){
 router.get('/2',function(req,res,next){
     res.send(AppCtx.SchemaManage.fields('TestClass'))
 });
+
+AppCtx.RedisManage.getClient();

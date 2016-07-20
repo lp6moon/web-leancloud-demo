@@ -2,9 +2,16 @@
   "name": "web-leancloud-demo",
   "version": "1.0.0",
   "dependencies": {
-    "jQuery": "~3.0.0",
+    "jQuery": "^3.1.0",
     "leancloud-storage": "~1.2.1",
     "lodash": "~4.13.1",
-    "webix": "~3.3.17"
+    "webix": "^3.3.17",
+    "webix-mvc-core": "~0.2.0",
+    "requirejs": "^2.2.0",
+    "routie": "^0.3.2",
+    "text": "requirejs-text#^2.0.15",
+    "require-css": "^0.1.8",
+    "domReady": "requirejs-domready#^2.0.1",
+    "polyglot": "^2.0.0"
   }
 }
