@@ -26,7 +26,7 @@ require(['app','domReady!'],function(app){
 
     app.doLogin=function(username,password){
         $.get('auth/login',{username:username,password:password}).done(function(res){
-            AV.become(res.data);
+            AV.User.become(res.data);
             app.toLastPage();
         });
     };

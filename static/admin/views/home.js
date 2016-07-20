@@ -1,6 +1,6 @@
 define([],function(){
 	var checkLogin=function(){
-		$.get('common/user/sessionToken').then(function(res){
+		$.get('common/user/token').then(function(res){
 			if(res.data) AV.User.become(res.data);
 		})
 	}
