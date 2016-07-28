@@ -86,6 +86,15 @@ module.exports={
                 dest:path.join(APP_ROOT_DIR,'static/uploads'),
                 limits:{fileSize:100*1024*1024}
             }
+        },
+
+        //多语言配置 详细配置见 https://github.com/mashpie/i18n-node
+        I18N:{
+            locales:['zh','en','jp'],
+            directory: path.join(APP_ROOT_DIR,'app-core/locales'),
+            defaultLocale:'en',
+            queryParameter:'lang',
+            reload:true
         }
     }
 }

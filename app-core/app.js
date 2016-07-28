@@ -158,6 +158,10 @@ module.exports=function(options){
         //自定义session 与AV兼容 详情见https://github.com/expressjs/cookie-session
         //app.use(require('cookie-session')({secret:'my secret'}));
 
+        //i18n中间件
+        var i18n=require('i18n');
+        i18n.configure(CFG.I18N);
+        app.use(i18n.init);
 
         app.use(CFG.STATIC.url,express.static(CFG.STATIC.dir,CFG.STATIC.options));
 

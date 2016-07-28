@@ -5,9 +5,10 @@ define(['webix.mvc.core.menu'],function(menu){
 		type:"header", template:app.config.name
 	};
 
+	var menuId="home:menu"
 	var menu = {
 		view:"menu",
-		id:"home:menu",
+		id:menuId,
 		width:180, layout:"y",
 		select:true,
 		template:"<span class='webix_icon fa-#icon#'></span> #value# ",
@@ -38,8 +39,8 @@ define(['webix.mvc.core.menu'],function(menu){
 
 	return {
 		$ui: ui,
-		$menu: "home:menu",
-		$onurlchange:function(){
+		$menu: menuId,
+		$onurlchange:function(config, url, $scope){
 			app.checkLogin();
 		}
 	};

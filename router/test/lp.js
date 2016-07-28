@@ -5,7 +5,7 @@ var AV=require('leanengine');
 var Promise=AV.Promise;
 var co=require('co');
 var request=require('request');
-var _=require('lodash')
+var _=require('lodash');
 
 
 router.get('/',function(req,res,next){
@@ -21,7 +21,8 @@ router.get('/1',function(req,res,next){
 });
 
 router.get('/2',function(req,res,next){
-    res.send(AppCtx.SchemaManage.fields('TestClass'))
+    //console.log(req.language);
+    res.send(res.__('hello'))
 });
 
 AppCtx.RedisManage.getClient();
