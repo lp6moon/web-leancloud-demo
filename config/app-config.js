@@ -36,7 +36,7 @@ module.exports={
     },
 
     DB:{
-        schemaPath:path.join(APP_ROOT_DIR,'common/schema-fields.js')  //所有模块的根目录
+        schemaPath:path.join(APP_ROOT_DIR,'common/schema-fields.js')  //应用的数据模型字段定义
     },
 
     SERVER:{

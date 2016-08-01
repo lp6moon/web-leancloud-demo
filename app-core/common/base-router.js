@@ -15,8 +15,8 @@ var FILTER=[
 
 var MAPPING=[
     ['count','/count','get'],
+    ['findOne','/one','get'],
     ['findAll','/','get'],
-    ['findOne','/:id','get'],
     ['save','/','post'],
     ['delete','/','delete']
 ];
@@ -76,8 +76,15 @@ module.exports=function(model,logger){
         var limit=req.query.limit;
         var offset=req.query.offset;
 
-        if(limit==-1)
-            return s.render(req,res,next,s.model.findAll(exps,fields,orderBy,limit,offset));
+        if(limit==-1){
+            s.model.findAll(exps,fields,orderBy,limit,offset).then(function(result){
+                result=result||[];
+                res.json({
+                    total:result.length,
+                    data:result
+                });
+            }).catch(next);
+        }
 
 
         Promise.all([
@@ -93,7 +100,7 @@ module.exports=function(model,logger){
     };
 
     s.findOne=function(req,res,next){
-        s.render(req,res,next,s.model.findOne(req.params.id,req.query.fields));
+        s.render(req,res,next,s.model.findOne(req.query.id,req.query.fields));
     };
 
     s.save=function(req,res,next){

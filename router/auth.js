@@ -10,8 +10,8 @@ router.get('/login',function(req,res,next){
     if(!uName||!uPass) return res.json({error:AppCtx.BusiError.ILLEGAL_PARAMS});
 
     AV.User.logIn(uName,uPass).then(function(user) {
-      res.saveCurrentUser(user);
-      res.json({data:user.getSessionToken()});
+        res.saveCurrentUser(user);
+        res.json({data:user.getSessionToken()});
     }).catch(next);
 });
 
