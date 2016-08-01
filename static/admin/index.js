@@ -32,6 +32,8 @@ require(['app','domReady!'],function(app){
 
     app.doLogin=function(username,password){
         $.get('auth/login',{username:username,password:password}).done(function(res){
+            if(res.error) return webix.message('登录失败','error');
+
             AV.User.become(res.data);
             app.toLastPage();
         });
